@@ -20,6 +20,8 @@ docker-compose.yml file. If the names you have specified is different, use that.
 
        CREATE DATABASE member_db;
 
+<hr/>
+
 - Since the database is ready, let use create the required tables and columns to that database using the Django models. Keep the database container
   running in this tab and you may continue the development in a new tab.
 - Follow the below steps:
@@ -193,3 +195,13 @@ you should have to 2 tabs where in one workshop_web_container should be running 
   - The difference in the previouse script and the current one can be visible in the given image
     ![Code Difference](Code_difference_1.png)
     ![Code Difference2](code_difference_2.png)
+    
+<hr/>
+
+    
+- Now go to workshop_web_container container and run the script
+
+      python3 web_scrapper.py
+- Once th script run completes, go to the database container and run the below sql query to check if the data is populated or not.
+
+      select * from members_blog;
