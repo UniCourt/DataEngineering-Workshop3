@@ -47,79 +47,79 @@ and run the below command
 2. Add our script to the file. Do not delete the existing contents. You can copy the below given content and paste it.
 
       
-      from django.apps import AppConfig
-
-      import psycopg2
-      import requests
-      import re
-      from bs4 import BeautifulSoup, element
-
-      db_name = 'member_db'
-      db_user = 'postgres'
-      db_pass = '123456'
-      db_host = 'psql-db'
-      db_port = '5432'
-      
-      conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass, host=db_host, port=db_port)
-
-      def add_row_to_blog(title, author, date, time):
-          sql = """INSERT INTO members_blog (title, release_date, blog_time, author, created_date) VALUES (%s, %s::DATE, %s::TIME, %s, NOW())"""
-      
-          with conn:
-              with conn.cursor() as curs:
-                  curs.execute(sql, (title, date, time, author))
-
-      def truncate_table():
-          print("Truncating contents all the tables")
-          with conn:
-              with conn.cursor() as curs:
-                  curs.execute("TRUNCATE members_blog CASCADE;")
-
-      def start_extraction():
-          print("Extraction started")
-          url = "https://blog.python.org/"
-      
-          data = requests.get(url)
-          page_soup = BeautifulSoup(data.text, 'html.parser')
-      
-      
-          blogs = page_soup.select('div.date-outer')
-          truncate_table()
-          for blog in blogs:
-              date = blog.select('.date-header span')[0].get_text()
-      
-              post = blog.select('.post')[0]
-      
-              title = ""
-              title_bar = post.select('.post-title')
-              if len(title_bar) > 0:
-                  title = title_bar[0].text
-              else:
-                  title = post.select('.post-body')[0].contents[0].text
-      
-              # getting the author and blog time
-              post_footer = post.select('.post-footer')[0]
-      
-              author = post_footer.select('.post-author span')[0].text
-      
-              time = post_footer.select('abbr')[0].text
-      
-              add_row_to_blog(title, author, date, time)
-      
-              print("\nTitle:", title.strip('\n'))
-              print("Date:", date, )
-              print("Time:", time)
-              print("Author:", author)
-      
-              # print("Number of blogs read:", count)
-              print(
-                  "\n---------------------------------------------------------------------------------------------------------------\n")
-      
-      if __name__ == "__main__":
-          start_extraction()
-      
-      class MembersConfig(AppConfig):
-          name = 'members'
+         from django.apps import AppConfig
+   
+         import psycopg2
+         import requests
+         import re
+         from bs4 import BeautifulSoup, element
+   
+         db_name = 'member_db'
+         db_user = 'postgres'
+         db_pass = '123456'
+         db_host = 'psql-db'
+         db_port = '5432'
+         
+         conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass, host=db_host, port=db_port)
+   
+         def add_row_to_blog(title, author, date, time):
+             sql = """INSERT INTO members_blog (title, release_date, blog_time, author, created_date) VALUES (%s, %s::DATE, %s::TIME, %s, NOW())"""
+         
+             with conn:
+                 with conn.cursor() as curs:
+                     curs.execute(sql, (title, date, time, author))
+   
+         def truncate_table():
+             print("Truncating contents all the tables")
+             with conn:
+                 with conn.cursor() as curs:
+                     curs.execute("TRUNCATE members_blog CASCADE;")
+   
+         def start_extraction():
+             print("Extraction started")
+             url = "https://blog.python.org/"
+         
+             data = requests.get(url)
+             page_soup = BeautifulSoup(data.text, 'html.parser')
+         
+         
+             blogs = page_soup.select('div.date-outer')
+             truncate_table()
+             for blog in blogs:
+                 date = blog.select('.date-header span')[0].get_text()
+         
+                 post = blog.select('.post')[0]
+         
+                 title = ""
+                 title_bar = post.select('.post-title')
+                 if len(title_bar) > 0:
+                     title = title_bar[0].text
+                 else:
+                     title = post.select('.post-body')[0].contents[0].text
+         
+                 # getting the author and blog time
+                 post_footer = post.select('.post-footer')[0]
+         
+                 author = post_footer.select('.post-author span')[0].text
+         
+                 time = post_footer.select('abbr')[0].text
+         
+                 add_row_to_blog(title, author, date, time)
+         
+                 print("\nTitle:", title.strip('\n'))
+                 print("Date:", date, )
+                 print("Time:", time)
+                 print("Author:", author)
+         
+                 # print("Number of blogs read:", count)
+                 print(
+                     "\n---------------------------------------------------------------------------------------------------------------\n")
+         
+         if __name__ == "__main__":
+             start_extraction()
+         
+         class MembersConfig(AppConfig):
+             name = 'members'
 
 <hr />
 
@@ -127,9 +127,10 @@ and run the below command
 folder as that of models.py and add the below function at the bottom of the file (Do not delete the existing contents)
    
 
-      def python_blog_scrap(request):
-              apps.start_extraction()
-              return JsonResponse({'status': 'sucess', "message" : "Extracted and populated the table."}, status=200)
+         def python_blog_scrap(request):
+                 apps.start_extraction()
+                 return JsonResponse({'status': 'sucess', "message" : "Extracted and populated the table."}, status=200)
+
 4. Need to include few import statements. Modify the import statements as below
 
          from django.views import View
