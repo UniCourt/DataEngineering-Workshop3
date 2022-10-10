@@ -70,9 +70,6 @@
 Open the folder dockerfile and edit the file named Dockerfile which is present inside that. You can copy the below content and paste it in Dockerfile.
    
 
-   myworld/dockerfiles/Dockerfile
-
-
       FROM python:3.10.2-alpine3.15
       # Install required packages
       # For psycopg2
