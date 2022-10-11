@@ -16,7 +16,7 @@ One Day workshop on web scraping, extractors and debugging a program.
 | 12:00 - 01:00 |  [`Creating Django view to integrate the script`](/docs/django_view.md)
 | 01:00 - 02:00 |  `Break`
 | 02:00 - 03:00 |  [`Creating Date Range and Incremental Extractors`](/docs/date_range_extrcators.md)
-| 03:00 - 04:30 |  [`Python debugging and profiling`](/docs/unit_test/debugging_and_profiling.md)
+| 03:00 - 04:30 |  [`Python debugging and profiling`](/docs/debugging_and_profiling.md)
 | 04:30 - 04:45 |  `Q & A`
 | 04:45 - 05:00 |  [`Wrapping Up`](/docs/workshop3_home_work.md)
 
