@@ -138,64 +138,64 @@ So modify the import statements as following
 
 - To achieve this let us Modify the function start_extraction() which is present inside apps.py file as following
 
-        def start_extraction(start_date=None, end_date=None, no_of_articles=None, start_id = None):
-            print("Extraction started")
-            url = "https://blog.python.org/"
-        
-            data = requests.get(url)
-            page_soup = BeautifulSoup(data.text, 'html.parser')
-        
-            if start_date:
-                start_date = parse(start_date)
-            if end_date:
-                end_date = parse(end_date)
-        
-            blogs = page_soup.select('div.date-outer')
-            truncate_table()
-            article_count = 0
-            counter = 1
-            for blog in blogs:
-                article_count += 1
-                if start_id and article_count < int(start_id):
-                    continue
-                if no_of_articles and counter > int(no_of_articles):
-                    continue
-                date = blog.select('.date-header span')[0].get_text()
-        
-                converted_date = parse(date)
-        
-                if start_date and converted_date < start_date:
-                    continue
-                if end_date and converted_date > end_date:
-                    continue
-        
-                post = blog.select('.post')[0]
-        
-                title = ""
-                title_bar = post.select('.post-title')
-                if len(title_bar) > 0:
-                    title = title_bar[0].text
-                else:
-                    title = post.select('.post-body')[0].contents[0].text
-        
-                # getting the author and blog time
-                post_footer = post.select('.post-footer')[0]
-        
-                author = post_footer.select('.post-author span')[0].text
-        
-                time = post_footer.select('abbr')[0].text
-        
-                add_row_to_blog(title, author, date, time)
-        
-                print("\nTitle:", title.strip('\n'))
-                print("Date:", date, )
-                print("Time:", time)
-                print("Author:", author)
-        
-                # print("Number of blogs read:", count)
-                print(
-                    "\n---------------------------------------------------------------------------------------------------------------\n")
-                counter += 1
+            def start_extraction(start_date=None, end_date=None, no_of_articles=None, start_id = None):
+                print("Extraction started")
+                url = "https://blog.python.org/"
+            
+                data = requests.get(url)
+                page_soup = BeautifulSoup(data.text, 'html.parser')
+            
+                if start_date:
+                    start_date = parse(start_date)
+                if end_date:
+                    end_date = parse(end_date)
+            
+                blogs = page_soup.select('div.date-outer')
+                truncate_table()
+                article_count = 0
+                counter = 1
+                for blog in blogs:
+                    article_count += 1
+                    if start_id and article_count < int(start_id):
+                        continue
+                    if no_of_articles and counter > int(no_of_articles):
+                        continue
+                    date = blog.select('.date-header span')[0].get_text()
+            
+                    converted_date = parse(date)
+            
+                    if start_date and converted_date < start_date:
+                        continue
+                    if end_date and converted_date > end_date:
+                        continue
+            
+                    post = blog.select('.post')[0]
+            
+                    title = ""
+                    title_bar = post.select('.post-title')
+                    if len(title_bar) > 0:
+                        title = title_bar[0].text
+                    else:
+                        title = post.select('.post-body')[0].contents[0].text
+            
+                    # getting the author and blog time
+                    post_footer = post.select('.post-footer')[0]
+            
+                    author = post_footer.select('.post-author span')[0].text
+            
+                    time = post_footer.select('abbr')[0].text
+            
+                    add_row_to_blog(title, author, date, time)
+            
+                    print("\nTitle:", title.strip('\n'))
+                    print("Date:", date, )
+                    print("Time:", time)
+                    print("Author:", author)
+            
+                    # print("Number of blogs read:", count)
+                    print(
+                        "\n---------------------------------------------------------------------------------------------------------------\n")
+                    counter += 1
 
 <hr />
 
