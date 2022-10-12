@@ -26,8 +26,6 @@ def start_extraction(start_date=None, end_date=None):
     blogs = page_soup.select('div.date-outer')
     truncate_table()
     for blog in blogs:
-        if no_of_articles and counter > int(no_of_articles):
-            continue
         date = blog.select('.date-header span')[0].get_text()
     
         converted_date = parse(date)

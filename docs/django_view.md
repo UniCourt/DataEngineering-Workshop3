@@ -7,9 +7,12 @@
         vi admin.py
 2. Add the below class to admin.py
 
-        class DjBlogAdmin(admin.ModelAdmin):
-           list_display = ("title", "release_date", "blog_time", "author", "created_date")
-           list_filter = ("author",)
+```buildoutcfg
+class DjBlogAdmin(admin.ModelAdmin):
+  list_display = ("title", "release_date", "blog_time", "author", "created_date")
+  list_filter = ("author",)
+```
+
 
 3. Register the Blog model
 
