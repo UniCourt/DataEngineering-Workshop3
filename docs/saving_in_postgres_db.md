@@ -51,6 +51,7 @@ class Blog(models.Model):
 ```
 
   - Now models.py will look like this
+
  ```buildoutcfg
 from django.db import models
    
