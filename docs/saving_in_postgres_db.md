@@ -38,49 +38,53 @@ docker-compose.yml file. If the names you have specified is different, use that.
 2. Currently we have one model Students present in that file. Let use add one more model called Blog into the same file.
 For that append the below code to that file
    
-
-    class Blog(models.Model):
-       title = models.CharField(max_length=500)
-       release_date = models.DateTimeField('Realse Date')
-       blog_time = models.CharField(max_length=50)
-       author = models.CharField(max_length=200)
-       created_date = models.DateTimeField('Created Date', auto_now_add=True, null=True)
+```buildoutcfg
+class Blog(models.Model):
+    title = models.CharField(max_length=500)
+    release_date = models.DateTimeField('Realse Date')
+    blog_time = models.CharField(max_length=50)
+    author = models.CharField(max_length=200)
+    created_date = models.DateTimeField('Created Date', auto_now_add=True, null=True)
    
-       def __str__(self):                               
-           return self.title
+    def __str__(self):                               
+        return self.title
+```
 
   - Now models.py will look like this
 
-         from django.db import models
+ ```buildoutcfg
+from django.db import models
    
-         BRANCH_CHOICES = (
-             ("BA", "BA"),
-             ("B.COM", "B.COM"),
-             ("MBA", "MBA"),
-             ("CA", "CA"),
-         )
+BRANCH_CHOICES = (
+    ("BA", "BA"),
+    ("B.COM", "B.COM"),
+    ("MBA", "MBA"),
+    ("CA", "CA"),
+)
          
-         # Create your models here.
-         class Students(models.Model):
-             first_name = models.CharField(max_length=200)
-             last_name = models.CharField(max_length=200)
-             address = models.CharField(max_length=200)
-             roll_number = models.IntegerField()
-             mobile = models.CharField(max_length=10)
-             branch = models.CharField(max_length=10, choices=BRANCH_CHOICES, null=True)
+# Create your models here.
+class Students(models.Model):
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    roll_number = models.IntegerField()
+    mobile = models.CharField(max_length=10)
+    branch = models.CharField(max_length=10, choices=BRANCH_CHOICES, null=True)
          
-             def __str__(self):
-                 return self.first_name + " " + self.last_name
+    def __str__(self):
+        return self.first_name + " " + self.last_name
          
-         class Blog(models.Model):
-             title = models.CharField(max_length=500)
-             release_date = models.DateTimeField('Realse Date')
-             blog_time = models.CharField(max_length=50)
-             author = models.CharField(max_length=200)
-             created_date = models.DateTimeField('Created Date', auto_now_add=True, null=True)
-         
-             def __str__(self):                               
-                 return self.title
+class Blog(models.Model):
+    title = models.CharField(max_length=500)
+    release_date = models.DateTimeField('Realse Date')
+    blog_time = models.CharField(max_length=50)
+    author = models.CharField(max_length=200)
+    created_date = models.DateTimeField('Created Date', auto_now_add=True, null=True)
+             
+    def __str__(self):                               
+        return self.title
+```
+
    
    - Each class represents a model which will in turn represent a table in the database and each property of that class refers to
 each columns in that table.
@@ -112,85 +116,87 @@ you should have to 2 tabs where in one workshop_web_container should be running 
 - Now let us modify our script so that it will start saving the extracted data into the created table.
 - Open the web_scrapper.py file present in the myworld folder and replace the script with the one given below.
 
-        import psycopg2
-        import requests
-        import re
-        from bs4 import BeautifulSoup, element
+```buildoutcfg
+import psycopg2
+import requests
+import re
+from bs4 import BeautifulSoup, element
         
-        # For the credentials mentioned below, you may refer the docker-compose.yml present in myworld .
-        db_name = 'member_db'
-        db_user = 'postgres'
-        db_pass = '123456'
-        db_host = 'psql-db'
-        db_port = '5432'
+# For the credentials mentioned below, you may refer the docker-compose.yml present in myworld .
+db_name = 'member_db'
+db_user = 'postgres'
+db_pass = '123456'
+db_host = 'psql-db'
+db_port = '5432'
         
-        # This will create the connection the to postgres database.
-        conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass, host=db_host, port=db_port)
-        
-        
-        def add_row_to_blog(title, author, date, time):
-            # This function will add the entry to database
-            sql = """INSERT INTO members_blog (title, release_date, blog_time, author, created_date) VALUES (%s, %s::DATE, %s::TIME, %s, NOW())"""
-        
-            with conn:
-                with conn.cursor() as curs:
-                    curs.execute(sql, (title, date, time, author))
+# This will create the connection the to postgres database.
+conn = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass, host=db_host, port=db_port)
         
         
-        def truncate_table():
-            # This function will delete the existing entries from the database.
-            with conn:
-                with conn.cursor() as curs:
-                    curs.execute("TRUNCATE members_blog CASCADE;")
+def add_row_to_blog(title, author, date, time):
+    # This function will add the entry to database
+    sql = """INSERT INTO members_blog (title, release_date, blog_time, author, created_date) VALUES (%s, %s::DATE, %s::TIME, %s, NOW())"""
+            
+    with conn:
+        with conn.cursor() as curs:
+            curs.execute(sql, (title, date, time, author))
         
         
-        def start_extraction():
-            print("Extraction started")
-            url = "https://blog.python.org/"
-        
-            # Each time when we add new entry we delete the existing entries.
-            truncate_table()
-        
-            data = requests.get(url)
-            page_soup = BeautifulSoup(data.text, 'html.parser')
-        
-            # Getting all the articles
-            blogs = page_soup.select('div.date-outer')
-        
-            for blog in blogs:
-                # loop through each article
-                date = blog.select('.date-header span')[0].get_text()
-        
-                post = blog.select('.post')[0]
-        
-                title = ""
-                title_bar = post.select('.post-title')
-                if len(title_bar) > 0:
-                    title = title_bar[0].text
-                else:
-                    title = post.select('.post-body')[0].contents[0].text
-        
-                # getting the author and blog time
-                post_footer = post.select('.post-footer')[0]
-        
-                author = post_footer.select('.post-author span')[0].text
-        
-                time = post_footer.select('abbr')[0].text
-                # Inserting data into database
-                add_row_to_blog(title, author, date, time)
-        
-                print("\nTitle:", title.strip('\n'))
-                print("Date:", date, )
-                print("Time:", time)
-                print("Author:", author)
-        
-                # print("Number of blogs read:", count)
-                print(
-                    "\n---------------------------------------------------------------------------------------------------------------\n")
+def truncate_table():
+    # This function will delete the existing entries from the database.
+    with conn:
+        with conn.cursor() as curs:
+            curs.execute("TRUNCATE members_blog CASCADE;")
         
         
-        if __name__ == "__main__":
-            start_extraction()
+def start_extraction():
+    print("Extraction started")
+    url = "https://blog.python.org/"
+            
+    # Each time when we add new entry we delete the existing entries.
+    truncate_table()
+    data = requests.get(url)
+    page_soup = BeautifulSoup(data.text, 'html.parser')
+            
+    # Getting all the articles
+    blogs = page_soup.select('div.date-outer')
+            
+    for blog in blogs:
+        # loop through each article
+        date = blog.select('.date-header span')[0].get_text()
+                
+        post = blog.select('.post')[0]
+                
+        title = ""
+        title_bar = post.select('.post-title')
+        if len(title_bar) > 0:
+            title = title_bar[0].text
+        else:
+            title = post.select('.post-body')[0].contents[0].text
+        
+        # getting the author and blog time
+        post_footer = post.select('.post-footer')[0]
+        
+        author = post_footer.select('.post-author span')[0].text
+        
+        time = post_footer.select('abbr')[0].text
+        # Inserting data into database
+        add_row_to_blog(title, author, date, time)
+        
+        print("\nTitle:", title.strip('\n'))
+        print("Date:", date, )
+        print("Time:", time)
+        print("Author:", author)
+        
+        # print("Number of blogs read:", count)
+        print(
+            "\n---------------------------------------------------------------------------------------------------------------\n")
+                
+        
+if __name__ == "__main__":
+    start_extraction()
+```
+       
 
   - The difference in the previouse script and the current one can be visible in the given image
     ![Code Difference](Code_difference_1.png)
