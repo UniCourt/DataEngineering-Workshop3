@@ -69,7 +69,7 @@ def start_extraction():
         print("Time:", time)
         print("Author:", author)
 
-        # print("Number of blogs read:", count)
+        # print("Number of blogs read from python insider:", count)
         print(
             "\n---------------------------------------------------------------------------------------------------------------\n")
 
