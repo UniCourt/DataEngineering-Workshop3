@@ -65,9 +65,9 @@ def start_extraction():
 
         post_header = post.select('.post-header')[0]
         
-        '''contents = page_soup.find_all('div',class_='date-posts')
+        #contents = page_soup.find_all('div',class_='date-posts')
         #print(contents)
-        for con in contents:'''
+        #for con in contents:
         content = post.select('.post-body')[0].text
         html = 'S:\web_scapping\python_blogs.html'
         with open(html, 'w', encoding='utf-8') as f:
