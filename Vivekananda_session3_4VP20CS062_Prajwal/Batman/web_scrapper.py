@@ -69,7 +69,7 @@ def start_extraction():
         #print(contents)
         #for con in contents:
         content = post.select('.post-body')[0].text
-        html = 'S:\web_scapping\python_blogs.html'
+        html = 'S:\web_scraping\python_blogs.html'
         with open(html, 'w', encoding='utf-8') as f:
             f.write(data.text)
         
