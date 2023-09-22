@@ -24,11 +24,9 @@ def add_row_to_blog(title, author, date, time, content, total_comments, recommen
     else:
         total_comments = 0
 
-    # Convert recommended_on_google to a boolean (True or False) based on your logic
-    # For example, if it's "recommended," set it to True; otherwise, set it to False
     recommended_on_google = True if recommended_on_google == "recommended" else False
 
-    # This function will add the entry to the database
+
     sql = """
     INSERT INTO members_blog (title, release_date, blog_time, author, created_date, content, total_comments, recommended_on_google, file_path_html)
     VALUES (%s, %s::DATE, %s::TIME, %s, NOW(), %s, %s, %s, %s)
