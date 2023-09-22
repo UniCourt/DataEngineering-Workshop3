@@ -56,7 +56,7 @@ def start_extraction():
     blogs = page_soup.select('div.date-outer')
 
     for blog in blogs:
-        # loop through each article
+    
         date = blog.select('.date-header span')[0].get_text()
 
         post = blog.select('.post')[0]
@@ -75,19 +75,19 @@ def start_extraction():
 
         time = post_footer.select('abbr')[0].text
 
-        # New code to scrape additional information
+
         content = post.select('.post-body')[0].text.strip()  # Content
 
-        # Check if there are elements with the comment-link span selector
+        
         comment_link_span = post_footer.select('.comment-link span')
         if comment_link_span:
             total_comments = comment_link_span[0].text  # Total Comments
         else:
             total_comments = "No comments found"
 
-        # Add logic to scrape "recommended this on google" and "file path of saved HTML" here
-        recommended_on_google = ""  # Replace with actual logic
-        file_path_html = ""  # Replace with actual logic
+        
+        recommended_on_google = "" 
+        file_path_html = ""  
 
         # Inserting data into the database
         add_row_to_blog(title, author, date, time, content, total_comments, recommended_on_google, file_path_html)
