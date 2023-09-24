@@ -70,15 +70,9 @@ def start_extraction():
 
         # getting the author and blog time
         post_footer = post.select('.post-footer')[0]
-
         author = post_footer.select('.post-author span')[0].text
-
         time = post_footer.select('abbr')[0].text
-
-
         content = post.select('.post-body')[0].text.strip()  # Content
-
-        
         comment_link_span = post_footer.select('.comment-link span')
         if comment_link_span:
             total_comments = comment_link_span[0].text  # Total Comments
