@@ -6,7 +6,7 @@ class DjStudentAdmin(admin.ModelAdmin):
    list_filter = ("branch",)
 
 class DjBlogAdmin(admin.ModelAdmin):
-  list_display = ("title", "release_date", "blog_time", "author", "created_date")
+  list_display = ("title", "release_date", "blog_time", "author", "cont_d", "recommend","created_date")
   list_filter = ("author",)
 
 # Register your models here.
